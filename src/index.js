@@ -108,10 +108,41 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
   // Complete aqui
+
+  const { user } = request;
+  const { id } = request.params;
+
+  // faz a busca pelo array todos com o id 
+  const todo = user.todos.find(todo => todo.id === id);
+
+  if(!todo) {
+    return response.status(404).json({ error: 'Todo not found'});
+  }
+
+  todo.done = true;
+
+  return response.json(todo);
+
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   // Complete aqui
+  const { user } = request;
+  const { id } = request.params;
+
+  // retorna a posição do array que o objeto existe
+  const todoIndex = user.todos.findIndex(todo => todo.id === id);
+
+  // se tiver -1 significa que não foi encontrado
+  if(todoIndex === -1) {
+    return response.status(404).json({ error: 'Todo not found'});
+  }
+
+  user.todos.splice(todoIndex, 1);
+
+  return response.status(204).json();
+
+
 });
 
 module.exports = app;
