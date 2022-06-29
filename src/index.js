@@ -60,6 +60,9 @@ app.post('/users', (request, response) => {
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
   // Complete aqui
+  const { user } = request;
+
+  return response.json(user.todos);
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
@@ -78,11 +81,29 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 
   user.todos.push(userTodo);
 
-  return response.status(201).send();
+  return response.status(201).send(userTodo);
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
   // Complete aqui
+
+  const { user } = request;
+  const { title, deadline } = request.body;
+  const { id } = request.params;
+  // faz a busca pelo array todos com o id 
+  const todo = user.todos.find(todo => todo.id === id);
+
+  //não pode atualizar um que não exista
+  if(!todo) {
+    return response.status(404).json({ error: 'Todo not found'});
+  }
+
+  todo.title = title;
+  todo.deadline = new Date(deadline);
+  
+
+  return response.json(todo);
+
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
