@@ -130,7 +130,7 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   const { user } = request;
   const { id } = request.params;
 
-  // retorna a posição do array que o objeto existe
+  // retorna a posição do array onde esta o objeto difere do find
   const todoIndex = user.todos.findIndex(todo => todo.id === id);
 
   // se tiver -1 significa que não foi encontrado
