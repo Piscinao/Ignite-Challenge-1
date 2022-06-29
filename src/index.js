@@ -45,15 +45,17 @@ app.post('/users', (request, response) => {
   //chamada de função uuidv4
   // const id = uuidv4();
 
-  users.push({
+  const user = {
     id: uuidv4(),
     name,
     username,
     todos: []
-  });
+  };
+
+  users.push(user)
 
 
-  return response.status(201).send();
+  return response.status(201).send(user);
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
